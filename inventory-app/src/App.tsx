@@ -1,6 +1,8 @@
+import SignIn from "./components/SIgnIn"
+
 function App() {
   return (
-    <h1>Hello, World</h1>
+    <SignIn />
   )
 }
 
