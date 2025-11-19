@@ -1,8 +1,8 @@
+// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth } from 'firebase/auth'
 
-// TODO: Replace the following with your app's Firebase project configuration
-// See: https://firebase.google.com/docs/web/learn-more#config-object
+// Your web app's Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyA13t2XSv65jRbs_xcsetlC1ntNN2bn9zk",
     authDomain: "inventory-management-app-3dc56.firebaseapp.com",
@@ -15,7 +15,6 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
-
-// Initialize Firebase Authentication and get a reference to the service
 const auth = getAuth(app);
+
+export { app, auth }
