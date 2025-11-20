@@ -1,7 +1,13 @@
-function SignIn() {
+import { auth } from "../config/firebase"
+import { createUserWithEmailAndPassword } from 'firebase/auth'
+
+export const SignIn = () => {
     return (
-        <h1>Sign in</h1>
+        <>
+            <input type="email" placeholder="Email" />
+            <input type="password" placeholder="Password" />
+
+            <button>Sign In</button>
+        </>
     )
 }
-
-export default SignIn
