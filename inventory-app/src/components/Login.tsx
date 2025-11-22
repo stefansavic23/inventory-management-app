@@ -50,7 +50,6 @@ export default function LoginFinal() {
     const login = async () => {
         try {
             await signInWithEmailAndPassword(auth, email, password)
-            console.log(email, password);
         } catch (err) {
             console.error(err)
         }
