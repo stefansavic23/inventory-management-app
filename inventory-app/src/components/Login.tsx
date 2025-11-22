@@ -50,10 +50,10 @@ export default function LoginFinal() {
             <Sheet
                 sx={{
                     width: 300,
-                    mx: 'auto', // margin left & right
-                    my: 4, // margin top & bottom
-                    py: 3, // padding top & bottom
-                    px: 2, // padding left & right
+                    mx: 'auto',
+                    my: 4,
+                    py: 3,
+                    px: 2,
                     display: 'flex',
                     flexDirection: 'column',
                     gap: 2,
@@ -71,7 +71,6 @@ export default function LoginFinal() {
                 <FormControl>
                     <FormLabel>Email</FormLabel>
                     <Input
-                        // html input attribute
                         name="email"
                         type="email"
                         placeholder="johndoe@email.com"
@@ -89,7 +88,7 @@ export default function LoginFinal() {
                 <Button sx={{ mt: 1 /* margin top */ }}>Log in</Button>
                 <Button sx={{ mt: 1 /* margin top */ }}>Log in With Google</Button>
                 <Typography
-                    endDecorator={<Link href="/sign-up">Sign up</Link>}
+                    endDecorator={<Link href="/signup">Sign up</Link>}
                     sx={{ fontSize: 'sm', alignSelf: 'center' }}
                 >
                     Don&apos;t have an account?
