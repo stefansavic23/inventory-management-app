@@ -7,12 +7,11 @@ import FormControl from '@mui/joy/FormControl';
 import FormLabel from '@mui/joy/FormLabel';
 import Input from '@mui/joy/Input';
 import Button from '@mui/joy/Button';
-import Link from '@mui/joy/Link';
 import Select from '@mui/joy/Select';
 import Option from '@mui/joy/Option';
+import { useState } from "react"
 import { auth, googleProvider } from "../config/firebase"
-import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
-import { useState } from 'react';
+import { createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth'
 
 function ModeToggle() {
     const { mode, setMode } = useColorScheme();
@@ -43,20 +42,20 @@ function ModeToggle() {
     );
 }
 
-export default function LoginFinal() {
+export default function SignUp() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
-    const login = async () => {
+    const signUp = async () => {
         try {
-            await signInWithEmailAndPassword(auth, email, password)
-            console.log(email, password);
-        } catch (err) {
-            console.error(err)
+            await createUserWithEmailAndPassword(auth, email, password)
+        }
+        catch (err) {
+            console.error(err);
         }
     }
 
-    const signInWithGoogle = async () => {
+    const signUpWithGoogle = async () => {
         try {
             await signInWithPopup(auth, googleProvider)
         }
@@ -64,7 +63,6 @@ export default function LoginFinal() {
             console.error(err);
         }
     }
-
     return (
         <main>
             <CssVarsProvider>
@@ -90,7 +88,7 @@ export default function LoginFinal() {
                     <Typography level="h4" component="h1">
                         <b>Welcome!</b>
                     </Typography>
-                    <Typography level="body-sm">Log in to continue.</Typography>
+                    <Typography level="body-sm">Create account to continue.</Typography>
                 </div>
                 <FormControl>
                     <FormLabel>Email</FormLabel>
@@ -99,7 +97,6 @@ export default function LoginFinal() {
                         type="email"
                         placeholder="johndoe@email.com"
                         onChange={(e) => setEmail(e.target.value)}
-                        required
                     />
                 </FormControl>
                 <FormControl>
@@ -109,17 +106,10 @@ export default function LoginFinal() {
                         type="password"
                         placeholder="password"
                         onChange={(e) => setPassword(e.target.value)}
-                        required
                     />
                 </FormControl>
-                <Button sx={{ mt: 1 }} onClick={login}>Log in</Button>
-                <Button sx={{ mt: 1 }} onClick={signInWithGoogle}>Log in With Google</Button>
-                <Typography
-                    endDecorator={<Link href="/signup">Sign up</Link>}
-                    sx={{ fontSize: 'sm', alignSelf: 'center' }}
-                >
-                    Don&apos;t have an account?
-                </Typography>
+                <Button sx={{ mt: 1 }} onClick={signUp}>Sign Up</Button>
+                <Button sx={{ mt: 1 }} onClick={signUpWithGoogle}>Sign Up With Google</Button>
             </Sheet>
         </main>
     );
