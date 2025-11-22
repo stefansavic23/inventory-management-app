@@ -10,6 +10,7 @@ import Button from '@mui/joy/Button';
 import Link from '@mui/joy/Link';
 import Select from '@mui/joy/Select';
 import Option from '@mui/joy/Option';
+import Alert from '@mui/joy/Alert';
 import { auth, googleProvider } from "../config/firebase"
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { useState } from 'react';
@@ -46,11 +47,17 @@ function ModeToggle() {
 export default function LoginFinal() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [error, setError] = useState("")
 
     const login = async () => {
         try {
             await signInWithEmailAndPassword(auth, email, password)
         } catch (err) {
+            const error = (((err.message).replace("-", " ")).split("(auth/")[1]).replace(").", "")
+
+            const errorMessage = error.replace("-", " ")
+            setError(errorMessage)
+            console.error(errorMessage);
             console.error(err)
         }
     }
@@ -90,6 +97,9 @@ export default function LoginFinal() {
                         <b>Welcome!</b>
                     </Typography>
                     <Typography level="body-sm">Log in to continue.</Typography>
+                    {
+                        error ? <Alert color="danger">{error}</Alert> : ''
+                    }
                 </div>
                 <FormControl>
                     <FormLabel>Email</FormLabel>
