@@ -14,6 +14,7 @@ import Alert from '@mui/joy/Alert';
 import { auth, googleProvider } from "../config/firebase"
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function ModeToggle() {
     const { mode, setMode } = useColorScheme();
@@ -48,10 +49,12 @@ export default function LoginFinal() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [error, setError] = useState("")
+    const navigate = useNavigate()
 
     const login = async () => {
         try {
             await signInWithEmailAndPassword(auth, email, password)
+            navigate("/inventory")
         } catch (err) {
             const error = (((err.message).replace("-", " ")).split("(auth/")[1]).replace(").", "")
 

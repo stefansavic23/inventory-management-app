@@ -13,6 +13,7 @@ import Alert from '@mui/joy/Alert';
 import { useState } from "react"
 import { auth, googleProvider } from "../config/firebase"
 import { createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth'
+import { useNavigate } from 'react-router-dom';
 
 function ModeToggle() {
     const { mode, setMode } = useColorScheme();
@@ -47,10 +48,12 @@ export default function SignUp() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [error, setError] = useState("")
+    const navigate = useNavigate()
 
     const signUp = async () => {
         try {
             await createUserWithEmailAndPassword(auth, email, password)
+            navigate("/inventory")
         }
         catch (err) {
             const error = (((err.message).replace("-", " ")).split("(auth/")[1]).replace(").", "")
