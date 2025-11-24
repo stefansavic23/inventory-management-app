@@ -22,14 +22,7 @@ export default Inventory
 import { db } from "../config/firebase"
 import { useEffect, useState } from "react"
 import { getDocs, collection } from "firebase/firestore"
-import Button from '@mui/joy/Button';
-import Card from '@mui/joy/Card';
-import CardContent from '@mui/joy/CardContent';
-import CardActions from '@mui/joy/CardActions';
-import Typography from '@mui/joy/Typography';
-import Sheet from '@mui/joy/Sheet';
-import { CssVarsProvider } from '@mui/joy/styles';
-import CssBaseline from '@mui/joy/CssBaseline';
+import Item from "./Item"
 
 export default function Inventory() {
     const [itemList, setItemList] = useState([])
@@ -56,55 +49,8 @@ export default function Inventory() {
     return (
         <>
             {itemList.map((item) => (
-                <CssVarsProvider defaultMode="dark">
-                    <CssBaseline />
-
-                    <Sheet
-                        sx={{
-                            width: 300,
-                            mx: 'auto',
-                            my: 4,
-                            py: 3,
-                            px: 2,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: 2,
-                        }}
-                    >
-                        <Card
-                            key={item.id}
-                            variant="solid"
-                            color="primary"
-                            invertedColors
-                            sx={{
-                                boxShadow: 'sm',
-                                width: 400,
-                                maxWidth: '100%',
-                                overflow: 'auto',
-                                resize: 'horizontal',
-                            }}
-                        >
-                            <div>
-                                <Typography level="h2">
-                                    Name: {item.name}
-                                </Typography>
-                            </div>
-                            <CardContent>
-                                <Typography level="body-md">
-                                    Quantity: {item.quantity}
-                                </Typography>
-                                <Typography level="body-md">
-                                    Price: ${item.price}
-                                </Typography>
-                            </CardContent>
-                            <CardActions>
-                                <Button variant="solid">Get</Button>
-                            </CardActions>
-                        </Card>
-                    </Sheet>
-                </CssVarsProvider>
-            ))
-            }
+                <Item name={item.name} id={item.id} quantity={item.quantity} price={item.price} />
+            ))}
         </>
     )
 };
