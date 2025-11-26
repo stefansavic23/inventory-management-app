@@ -18,7 +18,7 @@ const Item = ({ name, price, quantity, id }: Props) => {
     return (
         <CssVarsProvider defaultMode="dark">
             <CssBaseline />
-
+            <Typography level="h1" textAlign={'center'}>Inventory</Typography>
             <Sheet
                 sx={{
                     width: 300,
@@ -62,7 +62,7 @@ const Item = ({ name, price, quantity, id }: Props) => {
                     </CardActions>
                 </Card>
             </Sheet>
-        </CssVarsProvider>
+        </CssVarsProvider >
     )
 }
 
