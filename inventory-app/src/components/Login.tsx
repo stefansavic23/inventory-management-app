@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { CssVarsProvider, useColorScheme } from '@mui/joy/styles';
+import { CssVarsProvider } from '@mui/joy/styles';
 import Sheet from '@mui/joy/Sheet';
 import CssBaseline from '@mui/joy/CssBaseline';
 import Typography from '@mui/joy/Typography';
@@ -8,42 +7,12 @@ import FormLabel from '@mui/joy/FormLabel';
 import Input from '@mui/joy/Input';
 import Button from '@mui/joy/Button';
 import Link from '@mui/joy/Link';
-import Select from '@mui/joy/Select';
-import Option from '@mui/joy/Option';
 import Alert from '@mui/joy/Alert';
 import { auth, googleProvider } from "../config/firebase"
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function ModeToggle() {
-    const { mode, setMode } = useColorScheme();
-    const [mounted, setMounted] = React.useState(false);
-
-    // necessary for server-side rendering
-    // because mode is undefined on the server
-    React.useEffect(() => {
-        setMounted(true);
-    }, []);
-    if (!mounted) {
-        return <Button variant="soft">Change mode</Button>;
-    }
-
-    return (
-        <Select
-            variant="soft"
-            value={mode}
-            onChange={(event, newMode) => {
-                setMode(newMode);
-            }}
-            sx={{ width: 'max-content' }}
-        >
-            <Option value="system">System</Option>
-            <Option value="light">Light</Option>
-            <Option value="dark">Dark</Option>
-        </Select>
-    );
-}
 
 export default function LoginFinal() {
     const [email, setEmail] = useState("")
@@ -76,9 +45,6 @@ export default function LoginFinal() {
 
     return (
         <main>
-            <CssVarsProvider>
-                <ModeToggle />
-            </CssVarsProvider>
             <CssBaseline />
             <Sheet
                 sx={{
