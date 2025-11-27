@@ -25,7 +25,6 @@ function ModeToggle() {
             }}
             sx={{ width: 'max-content' }}
         >
-            <Option value="system">System</Option>
             <Option value="light">Light</Option>
             <Option value="dark">Dark</Option>
         </Select>
