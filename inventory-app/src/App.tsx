@@ -3,6 +3,7 @@ import LoginFinal from "./components/Login"
 import SignUp from "./components/SignUp"
 import Inventory from "./components/Inventory"
 import MenuComponent from "./components/Menu"
+import AdminPanel from "./components/AdminPanel"
 import { CssVarsProvider, Typography } from "@mui/joy"
 import ModeToggle from "./components/ModeToggle"
 import Grid from "@mui/joy/Grid"
@@ -52,6 +53,7 @@ function AppContent() {
           <Route path="/login" element={<LoginFinal />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/inventory" element={<Inventory />} />
+          <Route path="/admin/panel" element={<AdminPanel />} />
         </Routes>
       </BrowserRouter>
     </div>

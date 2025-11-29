@@ -1,4 +1,3 @@
-import { CssVarsProvider } from '@mui/joy/styles';
 import Sheet from '@mui/joy/Sheet';
 import CssBaseline from '@mui/joy/CssBaseline';
 import Typography from '@mui/joy/Typography';
@@ -23,6 +22,11 @@ export default function LoginFinal() {
     const login = async () => {
         try {
             await signInWithEmailAndPassword(auth, email, password)
+
+            if (email === "admin@gmail.com" && password === "admin123") {
+                return navigate("/admin/panel")
+            }
+
             navigate("/inventory")
         } catch (err) {
             const error = (((err.message).replace("-", " ")).split("(auth/")[1]).replace(").", "")
