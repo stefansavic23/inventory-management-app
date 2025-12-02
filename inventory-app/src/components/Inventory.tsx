@@ -1,28 +1,8 @@
-/*
-
-const Inventory = () => {
-    
-
-    return (
-        <div>
-            {itemList.map((item) => (
-                <div key={item.id}>
-                    <h1>{item.name}</h1>
-                    <p>{item.price}</p>
-                    <p>{item.quantity}</p>
-                </div>
-            ))}
-        </div>
-    )
-}
-
-export default Inventory
-*/
-
 import { db } from "../config/firebase"
 import { useEffect, useState } from "react"
 import { getDocs, collection } from "firebase/firestore"
 import Item from "./Item"
+import { Grid } from "@mui/joy"
 
 export default function Inventory() {
     const [itemList, setItemList] = useState([])
@@ -47,10 +27,19 @@ export default function Inventory() {
     }, [])
 
     return (
-        <>
-            {itemList.map((item) => (
-                <Item name={item.name} id={item.id} quantity={item.quantity} price={item.price} />
-            ))}
-        </>
+        <Grid
+            container
+            direction="row"
+            sx={{
+                justifyContent: "center",
+                alignItems: "center",
+            }}
+        >
+            {
+                itemList.map((item) => (
+                    <Item name={item.name} id={item.id} quantity={item.quantity} price={item.price} />
+                ))
+            }
+        </Grid>
     )
 };
