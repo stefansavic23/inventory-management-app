@@ -4,18 +4,24 @@ import Stack from '@mui/joy/Stack';
 import { Grid } from "@mui/material";
 import { collection, addDoc } from "firebase/firestore"
 import { db } from '../config/firebase';
+import { useState } from 'react';
 
 const AddItem = () => {
+    const [name, setName] = useState("")
+    const [quantity, setQuantity] = useState()
+    const [price, setPrice] = useState()
+
     const addItem = async () => {
-        const itemRef = addDoc(collection(db, "inventory"), {
-            name: "Iphone 17",
-            quantity: "10",
-            price: "999"
-        })
-
-        console.log("Document written with ID: ", itemRef.id)
+        try {
+            const itemRef = await addDoc(collection(db, "inventory"), {
+                name: name,
+                quantity: quantity,
+                price: price
+            })
+        } catch (err) {
+            console.error(err.messages)
+        }
     }
-
 
     return (
         <Grid container direction={"column"} sx={{
@@ -25,11 +31,11 @@ const AddItem = () => {
             <form
             >
                 <Stack spacing={1}>
-                    <Input placeholder="Name" required />
-                    <Input placeholder="Quantity" required />
-                    <Input placeholder="Price" required />
+                    <Input placeholder="Name" required onChange={(e) => setName(e.target.value)} />
+                    <Input placeholder="Quantity" required onChange={(e) => setQuantity(e.target.value)} />
+                    <Input placeholder="Price" required onChange={(e) => setPrice(e.target.value)} />
 
-                    <Button type="submit" onClick={addItem}>Add Item</Button>
+                    <Button onClick={addItem}>Add Item</Button>
                 </Stack>
             </form>
         </Grid>

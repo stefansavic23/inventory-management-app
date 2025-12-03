@@ -24,7 +24,7 @@ export default function Inventory() {
         }
 
         getItemList()
-    }, [])
+    }, [itemCollection])
 
     return (
         <Grid
