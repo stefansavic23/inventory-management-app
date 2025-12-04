@@ -57,7 +57,7 @@ const Item = ({ name, price, quantity, id }: Props) => {
                         </Typography>
                     </CardContent>
                     <CardActions>
-                        <Button variant="solid">Get</Button>
+                        <Button variant="solid" onClick={() => console.log(id)}>Get</Button>
                     </CardActions>
                 </Card>
             </Sheet>

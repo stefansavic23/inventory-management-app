@@ -5,11 +5,14 @@ import { Grid } from "@mui/material";
 import { collection, addDoc } from "firebase/firestore"
 import { db } from '../config/firebase';
 import { useState } from 'react';
+import { Snackbar } from '@mui/joy';
 
 const AddItem = () => {
     const [name, setName] = useState("")
     const [quantity, setQuantity] = useState()
     const [price, setPrice] = useState()
+    const [open, setOpen] = useState(false);
+
 
     const addItem = async () => {
         try {
@@ -18,27 +21,39 @@ const AddItem = () => {
                 quantity: quantity,
                 price: price
             })
+            setOpen(true)
+
         } catch (err) {
             console.error(err.messages)
         }
     }
 
     return (
-        <Grid container direction={"column"} sx={{
-            justifyContent: "center",
-            alignItems: "center",
-        }}>
-            <form
+        <>
+            <Snackbar
+                open={open}
+                onClose={() => setOpen(false)}
+                color="neutral"
+                autoHideDuration={2000}
             >
-                <Stack spacing={1}>
-                    <Input placeholder="Name" required onChange={(e) => setName(e.target.value)} />
-                    <Input placeholder="Quantity" required onChange={(e) => setQuantity(e.target.value)} />
-                    <Input placeholder="Price" required onChange={(e) => setPrice(e.target.value)} />
+                Item added successfully!
+            </Snackbar>
+            <Grid container direction={"column"} sx={{
+                justifyContent: "center",
+                alignItems: "center",
+            }}>
+                <form
+                >
+                    <Stack spacing={1}>
+                        <Input placeholder="Name" required onChange={(e) => setName(e.target.value)} />
+                        <Input placeholder="Quantity" required onChange={(e) => setQuantity(e.target.value)} />
+                        <Input placeholder="Price" required onChange={(e) => setPrice(e.target.value)} />
 
-                    <Button onClick={addItem}>Add Item</Button>
-                </Stack>
-            </form>
-        </Grid>
+                        <Button onClick={addItem}>Add Item</Button>
+                    </Stack>
+                </form>
+            </Grid>
+        </>
     )
 }
 
