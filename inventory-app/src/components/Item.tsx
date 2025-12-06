@@ -8,6 +8,8 @@ import { CssVarsProvider } from '@mui/joy/styles';
 import CssBaseline from '@mui/joy/CssBaseline';
 import { collection, addDoc } from "firebase/firestore"
 import { db, auth } from '../config/firebase';
+import { Snackbar } from '@mui/joy';
+import { useState } from 'react';
 
 interface Props {
     id: string,
@@ -17,6 +19,9 @@ interface Props {
 }
 
 const Item = ({ name, price, quantity, id }: Props) => {
+    const [message, setMessage] = useState("")
+    const [open, setOpen] = useState(false)
+
     const requestItem = async (itemId: string, userId: string) => {
         try {
             await addDoc(collection(db, "requests"), {
@@ -24,10 +29,11 @@ const Item = ({ name, price, quantity, id }: Props) => {
                 userId,
                 status: "pending",
             });
-            alert("Zahtev je poslat adminu na odobrenje.");
+            setMessage("Request has been sent to admin for approval.");
+            setOpen(true)
         } catch (err) {
             console.error(err);
-            alert("Došlo je do greške prilikom slanja zahteva.");
+            setMessage("An error occurred while sending the request.");
         }
     };
 
@@ -46,6 +52,15 @@ const Item = ({ name, price, quantity, id }: Props) => {
                     gap: 2,
                 }}
             >
+                <Snackbar
+                    open={open}
+                    onClose={() => setOpen(false)}
+                    color="neutral"
+                    autoHideDuration={2000}
+                >
+                    {message}
+                </Snackbar>
+
                 <Card
                     key={id}
                     variant="solid"
