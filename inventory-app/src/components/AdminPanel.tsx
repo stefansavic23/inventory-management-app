@@ -42,8 +42,8 @@ const AdminPanel = () => {
             <AddItem />
             {requestList.map(req => (
                 <div key={req.id}>
-                    <p>Item: {req.itemId}</p>
-                    <p>User: {req.userId}</p>
+                    <p>Item: {req.name}</p>
+                    <p>User: {req.email}</p>
                     <p>Status: {req.status}</p>
 
                     {req.status === "pending" && (

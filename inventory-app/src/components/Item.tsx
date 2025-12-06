@@ -22,11 +22,11 @@ const Item = ({ name, price, quantity, id }: Props) => {
     const [message, setMessage] = useState("")
     const [open, setOpen] = useState(false)
 
-    const requestItem = async (itemId: string, userId: string) => {
+    const requestItem = async (name: string, email: string) => {
         try {
             await addDoc(collection(db, "requests"), {
-                itemId,
-                userId,
+                name,
+                email,
                 status: "pending",
             });
             setMessage("Request has been sent to admin for approval.");
@@ -88,7 +88,7 @@ const Item = ({ name, price, quantity, id }: Props) => {
                         </Typography>
                     </CardContent>
                     <CardActions>
-                        <Button variant="solid" onClick={() => requestItem(id, auth.currentUser?.uid)}>Get</Button>
+                        <Button variant="solid" onClick={() => requestItem(name, auth.currentUser?.email)}>Get</Button>
                     </CardActions>
                 </Card>
             </Sheet>
