@@ -6,6 +6,8 @@ import Typography from '@mui/joy/Typography';
 import Sheet from '@mui/joy/Sheet';
 import { CssVarsProvider } from '@mui/joy/styles';
 import CssBaseline from '@mui/joy/CssBaseline';
+import { collection, addDoc } from "firebase/firestore"
+import { db, auth } from '../config/firebase';
 
 interface Props {
     id: string,
@@ -15,6 +17,20 @@ interface Props {
 }
 
 const Item = ({ name, price, quantity, id }: Props) => {
+    const requestItem = async (itemId: string, userId: string) => {
+        try {
+            await addDoc(collection(db, "requests"), {
+                itemId,
+                userId,
+                status: "pending",
+            });
+            alert("Zahtev je poslat adminu na odobrenje.");
+        } catch (err) {
+            console.error(err);
+            alert("Došlo je do greške prilikom slanja zahteva.");
+        }
+    };
+
     return (
         <CssVarsProvider defaultMode="dark">
             <CssBaseline />
@@ -57,7 +73,7 @@ const Item = ({ name, price, quantity, id }: Props) => {
                         </Typography>
                     </CardContent>
                     <CardActions>
-                        <Button variant="solid" onClick={() => console.log(id)}>Get</Button>
+                        <Button variant="solid" onClick={() => requestItem(id, auth.currentUser?.uid)}>Get</Button>
                     </CardActions>
                 </Card>
             </Sheet>

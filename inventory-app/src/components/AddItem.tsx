@@ -19,7 +19,8 @@ const AddItem = () => {
             const itemRef = await addDoc(collection(db, "inventory"), {
                 name: name,
                 quantity: quantity,
-                price: price
+                price: price,
+                status: "pending"
             })
             setOpen(true)
 
@@ -42,8 +43,7 @@ const AddItem = () => {
                 justifyContent: "center",
                 alignItems: "center",
             }}>
-                <form
-                >
+                <form>
                     <Stack spacing={1}>
                         <Input placeholder="Name" required onChange={(e) => setName(e.target.value)} />
                         <Input placeholder="Quantity" required onChange={(e) => setQuantity(e.target.value)} />
