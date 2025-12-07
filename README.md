@@ -42,7 +42,7 @@ This app allows admins to manage items and users to request items. Admins can ap
 
 ```bash
 git clone https://github.com/stefansavic23/inventory-management-app.git
-cd inventory-management-app
+cd inventory-app
 ```
 
 2. **Install dependencies:**
