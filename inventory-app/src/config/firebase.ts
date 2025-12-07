@@ -2,14 +2,22 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore"
 
+const apiKey = import.meta.env.VITE_API_KEY
+const authDomain = import.meta.env.VITE_AUTH_DOMAIN
+const projectId = import.meta.env.VITE_PROJECT_ID
+const storageBucket = import.meta.env.VITE_STORAGE_BUCKET
+const messagingSenderId = import.meta.env.VITE_MESSAGING_SENDER_ID
+const appId = import.meta.env.VITE_APP_ID
+const measurementId = import.meta.env.VITE_MEASUREMENT_ID
+
 const firebaseConfig: { [key: string]: string } = {
-    apiKey: "AIzaSyA13t2XSv65jRbs_xcsetlC1ntNN2bn9zk",
-    authDomain: "inventory-management-app-3dc56.firebaseapp.com",
-    projectId: "inventory-management-app-3dc56",
-    storageBucket: "inventory-management-app-3dc56.firebasestorage.app",
-    messagingSenderId: "677682313888",
-    appId: "1:677682313888:web:84c2af3b54d5f51f7fa7c5",
-    measurementId: "G-L8F5WPS76W"
+    apiKey,
+    authDomain,
+    projectId,
+    storageBucket,
+    messagingSenderId,
+    appId,
+    measurementId
 };
 
 const app = initializeApp(firebaseConfig);
