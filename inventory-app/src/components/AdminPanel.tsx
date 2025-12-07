@@ -1,4 +1,3 @@
-import Inventory from "./Inventory"
 import AddItem from "./AddItem"
 import { useState, useEffect } from "react";
 import { db } from "../config/firebase";
@@ -54,7 +53,6 @@ const AdminPanel = () => {
                     )}
                 </div>
             ))}
-            <Inventory />
         </>
     )
 }
