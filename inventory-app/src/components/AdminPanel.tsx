@@ -2,20 +2,18 @@ import AddItem from "./AddItem"
 import { useState, useEffect } from "react";
 import { db } from "../config/firebase";
 import { doc, updateDoc, collection, getDocs } from "firebase/firestore";
+import RequestCard from "./RequestCard";
+import { Grid } from "@mui/joy";
 
 const AdminPanel = () => {
     const [requestList, setRequestList] = useState<any[]>([]);
 
-    const approveRequest = async (requestId: string) => {
-        await updateDoc(doc(db, "requests", requestId), {
-            status: "approved",
-        });
+    const approveRequest = async (id: string) => {
+        await updateDoc(doc(db, "requests", id), { status: "approved" });
     };
 
-    const rejectRequest = async (requestId: string) => {
-        await updateDoc(doc(db, "requests", requestId), {
-            status: "rejected",
-        });
+    const rejectRequest = async (id: string) => {
+        await updateDoc(doc(db, "requests", id), { status: "rejected" });
     };
 
     const getAllRequests = async () => {
@@ -39,20 +37,25 @@ const AdminPanel = () => {
     return (
         <>
             <AddItem />
-            {requestList.map(req => (
-                <div key={req.id}>
-                    <p>Item: {req.name}</p>
-                    <p>User: {req.email}</p>
-                    <p>Status: {req.status}</p>
-
-                    {req.status === "pending" && (
-                        <>
-                            <button onClick={() => approveRequest(req.id)}>Approve</button>
-                            <button onClick={() => rejectRequest(req.id)}>Reject</button>
-                        </>
-                    )}
-                </div>
-            ))}
+            <Grid
+                container
+                direction="row"
+                sx={{
+                    justifyContent: "center",
+                    alignItems: "center",
+                }}
+            >
+                {requestList.map(req => (
+                    <RequestCard
+                        name={req.name}
+                        status={req.status}
+                        user={req.email}
+                        requestId={req.id}
+                        onApprove={approveRequest}
+                        onReject={rejectRequest}
+                    />
+                ))}
+            </Grid>
         </>
     )
 }
