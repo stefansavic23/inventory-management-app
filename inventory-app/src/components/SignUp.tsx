@@ -18,11 +18,14 @@ export default function SignUp() {
     const [error, setError] = useState("")
     const navigate = useNavigate()
 
+    const adminEmail = import.meta.env.VITE_ADMIN_EMAIL
+    const adminPassword = import.meta.env.VITE_ADMIN_PASSWORD
+
     const signUp = async () => {
         try {
             await createUserWithEmailAndPassword(auth, email, password)
 
-            if (email === "admin@gmail.com" && password === "admin123") {
+            if (email === adminEmail && adminPassword) {
                 return navigate("/admin/panel")
             }
 

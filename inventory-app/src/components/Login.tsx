@@ -19,11 +19,14 @@ export default function LoginFinal() {
     const [error, setError] = useState("")
     const navigate = useNavigate()
 
+    const adminEmail = import.meta.env.VITE_ADMIN_EMAIL
+    const adminPassword = import.meta.env.VITE_ADMIN_PASSWORD
+
     const login = async () => {
         try {
             await signInWithEmailAndPassword(auth, email, password)
 
-            if (email === "admin@gmail.com" && password === "admin123") {
+            if (email === adminEmail && password === adminPassword) {
                 return navigate("/admin/panel")
             }
 
