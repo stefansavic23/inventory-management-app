@@ -1,19 +1,19 @@
 import { db } from "../config/firebase"
 import { useEffect, useState } from "react"
-import { getDocs, collection, onSnapshot } from "firebase/firestore"
+import { getDocs, collection, onSnapshot, query, where } from "firebase/firestore"
 import Item from "./Item"
 import { Grid } from "@mui/joy"
 import { Snackbar } from '@mui/joy';
+import { getAuth } from "firebase/auth"
 
 export default function Inventory() {
     const [itemList, setItemList] = useState([])
-    const [requestResult, setRequestResult] = useState([])
     const [open, setOpen] = useState(false)
     const [snackbarMessage, setSnackbarMessage] = useState("");
 
     const itemCollection = collection(db, "inventory")
-    const requestsCollection = collection(db, "requests")
 
+    const currentUser = getAuth().currentUser?.email
 
     useEffect(() => {
         const getItemList = async () => {
@@ -30,33 +30,36 @@ export default function Inventory() {
         }
 
         getItemList()
-    }, [itemCollection])
+    }, [])
 
     useEffect(() => {
-        const unsubscribe = onSnapshot(requestsCollection, (snapshot) => {
-            const reqs = snapshot.docs.map(doc => ({
-                ...doc.data(),
-                id: doc.id,
-            }));
+        if (!currentUser) return;
 
-            const justApproved = reqs.find(r => r.status === "approved");
-            const justRejected = reqs.find(r => r.status === "rejected");
+        const q = query(
+            collection(db, "requests"),
+            where("email", "==", currentUser)
+        );
 
-            if (justApproved) {
-                setSnackbarMessage("Your request was approved!");
-                setOpen(true);
-            }
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            snapshot.docChanges().forEach(change => {
+                if (change.type === "modified") {
+                    const data = change.doc.data();
 
-            if (justRejected) {
-                setSnackbarMessage("Your request was rejected.");
-                setOpen(true);
-            }
+                    if (data.status === "approved") {
+                        setSnackbarMessage("Your request was approved!");
+                        setOpen(true);
+                    }
 
-            setRequestResult(reqs);
+                    if (data.status === "rejected") {
+                        setSnackbarMessage("Your request was rejected.");
+                        setOpen(true);
+                    }
+                }
+            })
         });
 
         return () => unsubscribe();
-    }, [])
+    }, [currentUser])
 
     return (
         <Grid
@@ -67,23 +70,23 @@ export default function Inventory() {
                 alignItems: "center",
             }}
         >
-            {
-                requestResult.map(() => (
-                    <Snackbar
-                        open={open}
-                        onClose={() => setOpen(false)}
-                        color="neutral"
-                        autoHideDuration={2000}
-                    >
-                        {snackbarMessage}
-                    </Snackbar>
-                ))
-            }
-            {
-                itemList.map((item) => (
-                    <Item name={item.name} id={item.id} quantity={item.quantity} price={item.price} />
-                ))
-            }
-        </Grid >
+            <Snackbar
+                open={open}
+                onClose={() => setOpen(false)}
+                color="neutral"
+                autoHideDuration={2000}
+            >
+                {snackbarMessage}
+            </Snackbar>
+
+            {itemList.map((item) => (
+                <Item
+                    name={item.name}
+                    id={item.id}
+                    quantity={item.quantity}
+                    price={item.price}
+                />
+            ))}
+        </Grid>
     )
-};
+}

@@ -3,7 +3,6 @@ import CardContent from '@mui/joy/CardContent';
 import CardActions from '@mui/joy/CardActions';
 import Button from '@mui/joy/Button';
 import Typography from '@mui/joy/Typography';
-import Chip from '@mui/joy/Chip';
 import { Grid } from '@mui/joy';
 
 interface Props {
