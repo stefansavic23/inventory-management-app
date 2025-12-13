@@ -10,6 +10,7 @@ interface Props {
     user: string;
     requestId: string;
     status: string;
+    requestedQuantity: number;
     onApprove: (id: string) => void;
     onReject: (id: string) => void;
 }
@@ -19,6 +20,7 @@ export default function RequestCard({
     user,
     requestId,
     status,
+    requestedQuantity,
     onApprove,
     onReject
 }: Props) {
@@ -50,6 +52,7 @@ export default function RequestCard({
                 <CardContent sx={{ textAlign: "center" }}>
                     <Typography level="body-lg">Item: {name}</Typography>
                     <Typography level="body-md">User: {user}</Typography>
+                    <Typography level="body-md">Requested quantity: {requestedQuantity}</Typography>
 
                     <Typography level="body-sm">
                         Status: {status}

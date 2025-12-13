@@ -1,64 +1,88 @@
-import AddItem from "./AddItem"
-import { useState, useEffect } from "react";
+import AddItem from "./AddItem";
+import { useEffect, useState } from "react";
 import { db } from "../config/firebase";
-import { doc, updateDoc, collection, getDocs } from "firebase/firestore";
+import {
+    doc,
+    updateDoc,
+    collection,
+    onSnapshot,
+    runTransaction
+} from "firebase/firestore";
 import RequestCard from "./RequestCard";
 import { Grid } from "@mui/joy";
 
 const AdminPanel = () => {
     const [requestList, setRequestList] = useState<any[]>([]);
 
-    const approveRequest = async (id: string) => {
-        console.log(requestList.find((obj) => obj.id === id))
-        await updateDoc(doc(db, "requests", id), { status: "approved" });
-    };
-
-    const rejectRequest = async (id: string) => {
-        await updateDoc(doc(db, "requests", id), { status: "rejected" });
-    };
-
-    const getAllRequests = async () => {
-        const snap = await getDocs(collection(db, "requests"));
-
-        return snap.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data(),
-        }));
-    };
-
     useEffect(() => {
-        const loadRequests = async () => {
-            const list = await getAllRequests();
-            setRequestList(list);
-        };
+        const unsub = onSnapshot(collection(db, "requests"), (snapshot) => {
+            const data = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data(),
+            }));
+            setRequestList(data);
+        });
 
-        loadRequests();
-    }, [requestList]);
+        return () => unsub();
+    }, []);
+
+    const approveRequest = async (request: any) => {
+        await runTransaction(db, async (transaction) => {
+            const itemRef = doc(db, "inventory", request.itemId);
+            const requestRef = doc(db, "requests", request.id);
+
+            const itemSnap = await transaction.get(itemRef);
+
+            if (!itemSnap.exists()) {
+                throw new Error("Item not found");
+            }
+
+            const currentQuantity = itemSnap.data().quantity;
+
+            if (currentQuantity < request.requestedQuantity) {
+                throw new Error("Not enough stock");
+            }
+
+            transaction.update(itemRef, {
+                quantity: currentQuantity - request.requestedQuantity,
+            });
+
+            transaction.update(requestRef, {
+                status: "approved",
+            });
+        });
+    };
+
+
+    const rejectRequest = async (requestId: string) => {
+        await updateDoc(doc(db, "requests", requestId), {
+            status: "rejected",
+        });
+    };
 
     return (
         <>
             <AddItem />
+
             <Grid
                 container
-                direction="row"
-                sx={{
-                    justifyContent: "center",
-                    alignItems: "center",
-                }}
+                spacing={2}
+                justifyContent="center"
             >
                 {requestList.map(req => (
                     <RequestCard
-                        name={req.name}
+                        key={req.id}
+                        name={req.itemName}
                         status={req.status}
                         user={req.email}
-                        requestId={req.id}
-                        onApprove={approveRequest}
-                        onReject={rejectRequest}
+                        requestedQuantity={req.requestedQuantity}
+                        onApprove={() => approveRequest(req)}
+                        onReject={() => rejectRequest(req.id)}
                     />
                 ))}
             </Grid>
         </>
-    )
-}
+    );
+};
 
-export default AdminPanel                                  
+export default AdminPanel;

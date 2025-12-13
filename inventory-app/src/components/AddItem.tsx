@@ -45,9 +45,9 @@ const AddItem = () => {
             }}>
                 <form>
                     <Stack spacing={1}>
-                        <Input placeholder="Name" required onChange={(e) => setName(e.target.value)} />
-                        <Input placeholder="Quantity" required onChange={(e) => setQuantity(e.target.value)} />
-                        <Input placeholder="Price" required onChange={(e) => setPrice(e.target.value)} />
+                        <Input placeholder="Name" type='string' required onChange={(e) => setName(e.target.value)} />
+                        <Input placeholder="Quantity" type='number' required onChange={(e) => setQuantity(e.target.value)} />
+                        <Input placeholder="Price" type='number' required onChange={(e) => setPrice(e.target.value)} />
 
                         <Button onClick={addItem}>Add Item</Button>
                     </Stack>

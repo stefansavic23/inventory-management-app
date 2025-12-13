@@ -1,43 +1,45 @@
-import { db } from "../config/firebase"
-import { useEffect, useState } from "react"
-import { getDocs, collection, onSnapshot, query, where } from "firebase/firestore"
-import Item from "./Item"
-import { Grid } from "@mui/joy"
-import { Snackbar } from '@mui/joy';
-import { getAuth } from "firebase/auth"
+import { useEffect, useState } from "react";
+import { db } from "../config/firebase";
+import {
+    collection,
+    onSnapshot,
+    query,
+    where
+} from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+import Item from "./Item";
+import { Grid, Snackbar } from "@mui/joy";
 
 export default function Inventory() {
-    const [itemList, setItemList] = useState([])
-    const [open, setOpen] = useState(false)
+    const [itemList, setItemList] = useState<any[]>([]);
+    const [open, setOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
 
-    const itemCollection = collection(db, "inventory")
-
-    const currentUser = getAuth().currentUser?.email
+    const auth = getAuth();
+    const currentUser = auth.currentUser;
 
     useEffect(() => {
-        const getItemList = async () => {
-            try {
-                const data = await getDocs(itemCollection)
-                const filteredData = data.docs.map((doc) => ({
+        const unsubscribe = onSnapshot(
+            collection(db, "inventory"),
+            (snapshot) => {
+                const items = snapshot.docs.map(doc => ({
+                    id: doc.id,
                     ...doc.data(),
-                    id: doc.id
-                }))
-                setItemList(filteredData)
-            } catch (err) {
-                console.error(err.message)
+                }));
+                setItemList(items);
             }
-        }
+        );
 
-        getItemList()
-    }, [])
+        return () => unsubscribe();
+    }, []);
+
 
     useEffect(() => {
         if (!currentUser) return;
 
         const q = query(
             collection(db, "requests"),
-            where("email", "==", currentUser)
+            where("userId", "==", currentUser.uid)
         );
 
         const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -55,38 +57,36 @@ export default function Inventory() {
                         setOpen(true);
                     }
                 }
-            })
+            });
         });
 
         return () => unsubscribe();
-    }, [currentUser])
+    }, [currentUser]);
 
     return (
         <Grid
             container
-            direction="row"
-            sx={{
-                justifyContent: "center",
-                alignItems: "center",
-            }}
+            spacing={2}
+            justifyContent="center"
         >
             <Snackbar
                 open={open}
                 onClose={() => setOpen(false)}
+                autoHideDuration={2500}
                 color="neutral"
-                autoHideDuration={2000}
             >
                 {snackbarMessage}
             </Snackbar>
 
-            {itemList.map((item) => (
+            {itemList.map(item => (
                 <Item
-                    name={item.name}
+                    key={item.id}
                     id={item.id}
+                    name={item.name}
                     quantity={item.quantity}
                     price={item.price}
                 />
             ))}
         </Grid>
-    )
+    );
 }
