@@ -9,6 +9,7 @@ const AdminPanel = () => {
     const [requestList, setRequestList] = useState<any[]>([]);
 
     const approveRequest = async (id: string) => {
+        console.log(requestList.find((obj) => obj.id === id))
         await updateDoc(doc(db, "requests", id), { status: "approved" });
     };
 

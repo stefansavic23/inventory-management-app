@@ -1,99 +1,164 @@
-import Button from '@mui/joy/Button';
-import Card from '@mui/joy/Card';
-import CardContent from '@mui/joy/CardContent';
-import CardActions from '@mui/joy/CardActions';
-import Typography from '@mui/joy/Typography';
-import Sheet from '@mui/joy/Sheet';
-import { CssVarsProvider } from '@mui/joy/styles';
-import CssBaseline from '@mui/joy/CssBaseline';
-import { collection, addDoc } from "firebase/firestore"
-import { db, auth } from '../config/firebase';
-import { Snackbar } from '@mui/joy';
-import { useState } from 'react';
+import { useState } from "react";
+import {
+    Card,
+    CardContent,
+    CardActions,
+    Typography,
+    Sheet,
+    Button,
+    Snackbar,
+    Modal,
+    Input,
+} from "@mui/joy";
+import { CssVarsProvider } from "@mui/joy/styles";
+import CssBaseline from "@mui/joy/CssBaseline";
+import { collection, addDoc } from "firebase/firestore";
+import { db, auth } from "../config/firebase";
 
 interface Props {
-    id: string,
-    name: string,
-    quantity: number,
-    price: number,
+    id: string;
+    name: string;
+    quantity: number;
+    price: number;
 }
 
-const Item = ({ name, price, quantity, id }: Props) => {
-    const [message, setMessage] = useState("")
-    const [open, setOpen] = useState(false)
+const Item = ({ id, name, quantity, price }: Props) => {
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState("");
+    const [openModal, setOpenModal] = useState(false);
+    const [quantityToGet, setQuantityToGet] = useState(1);
 
-    const requestItem = async (name: string, email: string) => {
+    const requestItem = async (itemId: string, requestedQuantity: number) => {
+        if (!auth.currentUser) {
+            setSnackbarMessage("You must be logged in.");
+            setOpenSnackbar(true);
+            return;
+        }
+
+        if (requestedQuantity < 1 || requestedQuantity > quantity) {
+            setSnackbarMessage("Invalid quantity selected.");
+            setOpenSnackbar(true);
+            return;
+        }
+
         try {
             await addDoc(collection(db, "requests"), {
-                name,
-                email,
+                itemId,
+                name: name,
+                requestedQuantity,
+                userId: auth.currentUser.uid,
+                email: auth.currentUser.email,
                 status: "pending",
+                createdAt: new Date(),
             });
-            setMessage("Request has been sent to admin for approval.");
-            setOpen(true)
+
+            setSnackbarMessage("Request has been sent to admin for approval.");
+            setOpenSnackbar(true);
+            setOpenModal(false);
+            setQuantityToGet(1);
         } catch (err) {
             console.error(err);
-            setMessage("An error occurred while sending the request.");
+            setSnackbarMessage("An error occurred while sending the request.");
+            setOpenSnackbar(true);
         }
     };
 
     return (
         <CssVarsProvider defaultMode="dark">
             <CssBaseline />
+
+            {/* Snackbar */}
+            <Snackbar
+                open={openSnackbar}
+                onClose={() => setOpenSnackbar(false)}
+                autoHideDuration={3000}
+                color="neutral"
+            >
+                {snackbarMessage}
+            </Snackbar>
+
+            {/* Modal */}
+            <Modal open={openModal} onClose={() => setOpenModal(false)}>
+                <Sheet
+                    variant="outlined"
+                    sx={{
+                        mx: "auto",
+                        my: "20vh",
+                        p: 3,
+                        width: 300,
+                        borderRadius: "md",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 2,
+                    }}
+                >
+                    <Typography level="h4">Select quantity</Typography>
+
+                    <Input
+                        type="number"
+                        value={quantityToGet}
+                        slotProps={{
+                            input: {
+                                min: 1,
+                                max: quantity,
+                            },
+                        }}
+                        onChange={(e) =>
+                            setQuantityToGet(Number(e.target.value))
+                        }
+                    />
+
+                    <Button
+                        onClick={() =>
+                            requestItem(id, quantityToGet)
+                        }
+                    >
+                        Confirm
+                    </Button>
+                </Sheet>
+            </Modal>
+
+            {/* Item Card */}
             <Sheet
                 sx={{
                     width: 300,
-                    mx: 'auto',
+                    mx: "auto",
                     my: 4,
                     py: 3,
                     px: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: 2,
                 }}
             >
-                <Snackbar
-                    open={open}
-                    onClose={() => setOpen(false)}
-                    color="neutral"
-                    autoHideDuration={2000}
-                >
-                    {message}
-                </Snackbar>
-
                 <Card
-                    key={id}
                     variant="solid"
                     color="primary"
                     invertedColors
-                    sx={{
-                        boxShadow: 'sm',
-                        width: 400,
-                        maxWidth: '100%',
-                        overflow: 'auto',
-                        resize: 'horizontal',
-                    }}
+                    sx={{ boxShadow: "sm" }}
                 >
-                    <div>
-                        <Typography level="h2">
-                            Name: {name}
-                        </Typography>
-                    </div>
+                    <Typography level="h2">
+                        {name}
+                    </Typography>
+
                     <CardContent>
-                        <Typography level="body-md">
-                            Quantity: {quantity}
+                        <Typography>
+                            Quantity available: {quantity}
                         </Typography>
-                        <Typography level="body-md">
-                            Price: $ {price}
+                        <Typography>
+                            Price: ${price}
                         </Typography>
                     </CardContent>
-                    <CardActions>
-                        <Button variant="solid" onClick={() => requestItem(name, auth.currentUser?.email)}>Get</Button>
+
+                    <CardActions sx={{ justifyContent: "center" }}>
+                        <Button
+                            disabled={quantity === 0}
+                            onClick={() => setOpenModal(true)}
+                        >
+                            Get
+                        </Button>
                     </CardActions>
                 </Card>
             </Sheet>
-        </CssVarsProvider >
-    )
-}
+        </CssVarsProvider>
+    );
+};
 
-export default Item
+export default Item;
