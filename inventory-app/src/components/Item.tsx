@@ -26,9 +26,10 @@ const Item = ({ id, name, quantity, price }: Props) => {
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
     const [openModal, setOpenModal] = useState(false);
-    const [quantityToGet, setQuantityToGet] = useState(1);
+    const [quantityToGet, setQuantityToGet] = useState<number>(1);
 
     const requestItem = async (itemId: string, requestedQuantity: number) => {
+
         if (!auth.currentUser) {
             setSnackbarMessage("You must be logged in.");
             setOpenSnackbar(true);
@@ -36,8 +37,6 @@ const Item = ({ id, name, quantity, price }: Props) => {
         }
 
         if (requestedQuantity < 1 || requestedQuantity > quantity) {
-            setSnackbarMessage("Invalid quantity selected.");
-            setOpenSnackbar(true);
             return;
         }
 
@@ -96,13 +95,7 @@ const Item = ({ id, name, quantity, price }: Props) => {
 
                     <Input
                         type="number"
-                        value={quantityToGet}
-                        slotProps={{
-                            input: {
-                                min: 1,
-                                max: quantity,
-                            },
-                        }}
+                        required
                         onChange={(e) =>
                             setQuantityToGet(Number(e.target.value))
                         }

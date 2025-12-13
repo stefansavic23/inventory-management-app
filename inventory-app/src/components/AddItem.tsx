@@ -9,13 +9,17 @@ import { Snackbar } from '@mui/joy';
 
 const AddItem = () => {
     const [name, setName] = useState("")
-    const [quantity, setQuantity] = useState()
-    const [price, setPrice] = useState()
+    const [quantity, setQuantity] = useState<number>(1)
+    const [price, setPrice] = useState<number>(1)
     const [open, setOpen] = useState(false);
 
 
     const addItem = async () => {
         try {
+            if (quantity < 1 || price < 1) {
+                return;
+            }
+
             const itemRef = await addDoc(collection(db, "inventory"), {
                 name: name,
                 quantity: quantity,
@@ -25,7 +29,7 @@ const AddItem = () => {
             setOpen(true)
 
         } catch (err) {
-            console.error(err.messages)
+            console.error(err.message)
         }
     }
 
@@ -46,10 +50,10 @@ const AddItem = () => {
                 <form>
                     <Stack spacing={1}>
                         <Input placeholder="Name" type='string' required onChange={(e) => setName(e.target.value)} />
-                        <Input placeholder="Quantity" type='number' required onChange={(e) => setQuantity(e.target.value)} />
-                        <Input placeholder="Price" type='number' required onChange={(e) => setPrice(e.target.value)} />
+                        <Input placeholder="Quantity" type='number' required onChange={(e) => setQuantity(Number(e.target.value))} />
+                        <Input placeholder="Price" type='number' required onChange={(e) => setPrice(Number(e.target.value))} />
 
-                        <Button onClick={addItem}>Add Item</Button>
+                        <Button type='button' onClick={addItem}>Add Item</Button>
                     </Stack>
                 </form>
             </Grid>
