@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { HashRouter, Routes, Route } from "react-router-dom"
 import LoginFinal from "./components/Login"
 import SignUp from "./components/SignUp"
 import Inventory from "./components/Inventory"
@@ -48,14 +48,14 @@ function AppContent() {
       </Grid>
 
       {/* ROUTING */}
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
-          <Route path="https://stefansavic23.github.io/inventory-management-app/login" element={<LoginFinal />} />
-          <Route path="https://stefansavic23.github.io/inventory-management-app/signup" element={<SignUp />} />
-          <Route path="https://stefansavic23.github.io/inventory-management-app/inventory" element={<Inventory />} />
-          <Route path="https://stefansavic23.github.io/inventory-management-app/admin/panel" element={<AdminPanel />} />
+          <Route path="/login" element={<LoginFinal />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/inventory" element={<Inventory />} />
+          <Route path="/admin/panel" element={<AdminPanel />} />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </div>
   );
 }
