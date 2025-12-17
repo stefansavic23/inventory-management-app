@@ -31,7 +31,7 @@ export default function SignUp() {
 
             navigate("/inventory")
         }
-        catch (err) {
+        catch (err: any) {
             const error = (((err.message).replace("-", " ")).split("(auth/")[1]).replace(").", "")
 
             const errorMessage = error.replace("-", " ")

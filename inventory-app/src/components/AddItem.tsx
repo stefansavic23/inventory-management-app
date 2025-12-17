@@ -20,7 +20,7 @@ const AddItem = () => {
                 return;
             }
 
-            const itemRef = await addDoc(collection(db, "inventory"), {
+            await addDoc(collection(db, "inventory"), {
                 name: name,
                 quantity: quantity,
                 price: price,
@@ -28,7 +28,7 @@ const AddItem = () => {
             })
             setOpen(true)
 
-        } catch (err) {
+        } catch (err: any) {
             console.error(err.message)
         }
     }

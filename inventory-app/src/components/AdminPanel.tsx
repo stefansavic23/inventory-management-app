@@ -71,7 +71,7 @@ const AdminPanel = () => {
             >
                 {requestList.map(req => (
                     <RequestCard
-                        key={req.id}
+                        requestId={req.id}
                         name={req.itemName}
                         status={req.status}
                         user={req.email}

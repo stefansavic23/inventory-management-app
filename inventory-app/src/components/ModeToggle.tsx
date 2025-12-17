@@ -20,7 +20,7 @@ function ModeToggle() {
         <Select
             variant="soft"
             value={mode}
-            onChange={(event, newMode) => {
+            onChange={(_, newMode) => {
                 setMode(newMode);
             }}
             sx={{ width: 'max-content' }}
