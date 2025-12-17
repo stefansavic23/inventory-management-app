@@ -18,22 +18,22 @@ const MenuComponent = () => {
             </MenuButton>
             <Menu>
                 <MenuItem>
-                    <Link href="/" color="neutral">
+                    <Link href="#/" color="neutral">
                         Home
                     </Link>
                 </MenuItem>
                 <MenuItem>
-                    <Link href="/login" color="neutral">
+                    <Link href="#/login" color="neutral">
                         Login
                     </Link>
                 </MenuItem>
                 <MenuItem>
-                    <Link href="/signup" color="neutral">
+                    <Link href="#/signup" color="neutral">
                         Sign up
                     </Link>
                 </MenuItem>
                 <MenuItem>
-                    <Link href="/inventory" color="neutral">
+                    <Link href="#/inventory" color="neutral">
                         Inventory
                     </Link>
                 </MenuItem>
