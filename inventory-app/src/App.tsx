@@ -50,10 +50,10 @@ function AppContent() {
       {/* ROUTING */}
       <BrowserRouter>
         <Routes>
-          <Route path="/login" element={<LoginFinal />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/inventory" element={<Inventory />} />
-          <Route path="/admin/panel" element={<AdminPanel />} />
+          <Route path="https://stefansavic23.github.io/inventory-management-app/login" element={<LoginFinal />} />
+          <Route path="https://stefansavic23.github.io/inventory-management-app/signup" element={<SignUp />} />
+          <Route path="https://stefansavic23.github.io/inventory-management-app/inventory" element={<Inventory />} />
+          <Route path="https://stefansavic23.github.io/inventory-management-app/admin/panel" element={<AdminPanel />} />
         </Routes>
       </BrowserRouter>
     </div>
