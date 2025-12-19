@@ -38,24 +38,8 @@ This app allows admins to manage items and users to request items. Admins can ap
 
 ## Setup
 
-1. **Clone the repository:**
-
-```bash
-git clone https://github.com/stefansavic23/inventory-management-app.git
-cd inventory-app
-```
-
-2. **Install dependencies:**
-
-```bash
-npm install
-```
-
-3. **Start the development server:**
-
-```bash
-npm run dev
-```
+**Live preview**
+https://stefansavic23.github.io/inventory-management-app/
 
 ---
 
